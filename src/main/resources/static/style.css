@@ -1,0 +1,8 @@
+body{
+    color: darkblue;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
