@@ -1,3 +1,4 @@
+
 package com.example.webtest.models;
 
 
@@ -6,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
+/*
 @Entity
 public class Task {
     @Id
@@ -58,3 +59,4 @@ public class Task {
         this.tags = tags;
     }
 }
+*/

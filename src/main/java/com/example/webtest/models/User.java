@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,6 +23,20 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE},
+            fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_solution",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "solved_task")}
+    )
+    private Set<Message> solvedTasks = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<TaskRating> ratings = new HashSet<>();
 
     public boolean isAdmin(){
         return roles.contains(Role.ADMIN);
@@ -89,5 +104,21 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Message> getSolvedTasks() {
+        return solvedTasks;
+    }
+
+    public void setSolvedTasks(Set<Message> solvedTasks) {
+        this.solvedTasks = solvedTasks;
+    }
+
+    public Set<TaskRating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<TaskRating> ratings) {
+        this.ratings = ratings;
     }
 }

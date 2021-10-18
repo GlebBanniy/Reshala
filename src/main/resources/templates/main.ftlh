@@ -12,7 +12,9 @@
 
 
 
-    <a href="/tasks">Last added tasks</a>
+    <a href="/tasks">
+        <h4>Last added tasks</h4>
+    </a>
     <div class="card-deck">
         <#list messages?reverse as message>
             <#if message?counter = 4>
@@ -25,7 +27,14 @@
                     </#if>
                 </div>
                 <div class="m-2">
-                    <a href="/tasks/${message.id}">${message.name!""}</a>
+                    <a href="/tasks/${message.id}">
+                        <STRONG>${message.name!""}</STRONG>
+                    </a>
+                    <#if profile??>
+                        <#if message.findSolver(profile)>
+                            (decided)
+                        </#if>
+                    </#if>
                 </div>
                 <div class="card-footer text-muted">
                     Author: ${(message.author.username)!"<none>"}
@@ -34,7 +43,7 @@
                     <br>
                     <i>Tags: ${message.tag!""}</i>
                     <br />
-                    <i>Rating: ${message.rating!""}</i>
+                    <i>Rating: ${message.getResultRating()}</i>
                 </div>
             </div>
         <#else>
@@ -42,7 +51,9 @@
         </#list>
     </div>
 
-    <h4>Rating</h4>
+    <a href="/tasks?sort=rating">
+        <h4>Rating</h4>
+    </a>
     <div class="card-deck">
         <#list messages?sort_by("rating")?reverse as message>
             <#if message?counter = 4>
@@ -55,8 +66,14 @@
                     </#if>
                 </div>
                 <div class="m-2">
-                    <STRONG>${message.name!""}</STRONG>
-
+                    <a href="/tasks/${message.id}">
+                        <STRONG>${message.name!""}</STRONG>
+                    </a>
+                    <#if profile??>
+                        <#if message.findSolver(profile)>
+                            (decided)
+                        </#if>
+                    </#if>
                 </div>
                 <div class="card-footer text-muted">
                     Author: ${(message.author.username)!"<none>"}

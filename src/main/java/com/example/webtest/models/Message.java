@@ -2,8 +2,12 @@ package com.example.webtest.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 @Entity
+@Table(name = "message")
 public class Message {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -19,7 +23,23 @@ public class Message {
     @JoinColumn(name = "user_id")
     private User author;
 
-    private String answer;
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE},
+            fetch = FetchType.EAGER
+    )
+    @JoinTable(
+            name = "users_solution",
+            joinColumns = @JoinColumn(name = "solved_task"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> taskSolvers = new HashSet<>();
+
+    @OneToMany(mappedBy = "message")
+    private Set<TaskRating> ratings = new HashSet<>();
+
+    private String answer1;
+    private String answer2;
+    private String answer3;
     private String filename;
 
     /*private String getAuthorName(){
@@ -31,14 +51,16 @@ public class Message {
     public Message() {
     }
 
-    public Message(String name, String text, String category, String tag, double rating, User author, String answer) {
+    public Message(String name, String text, String category, String tag, double rating, User author, String answer1, String answer2, String answer3) {
         this.name = name;
         this.text = text;
         this.category = category;
         this.tag = tag;
         this.rating = rating;
         this.author = author;
-        this.answer = answer;
+        this.answer1 = answer1;
+        this.answer2 = answer2;
+        this.answer3 = answer3;
     }
 
 /*    public Message(String name, String text, String category, String tag, User user) {
@@ -48,6 +70,25 @@ public class Message {
         this.tag = tag;
         this.author = user;
     }*/
+
+    public Set<TaskRating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<TaskRating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public double getResultRating(){
+        double sum = 0.0;
+        if (getRatings().size() == 0)
+            return 0.0;
+        for (Iterator<TaskRating> iterator = getRatings().iterator(); iterator.hasNext(); ){
+            TaskRating current = iterator.next();
+            sum += current.getRating();
+        }
+        return sum/getRatings().size();
+    }
 
     public double getRating() {
         return rating;
@@ -121,11 +162,44 @@ public class Message {
         this.filename = filename;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getAnswer1() {
+        return answer1;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setAnswer1(String answer1) {
+        this.answer1 = answer1;
+    }
+
+    public String getAnswer2() {
+        return answer2;
+    }
+
+    public void setAnswer2(String answer2) {
+        this.answer2 = answer2;
+    }
+
+    public String getAnswer3() {
+        return answer3;
+    }
+
+    public void setAnswer3(String answer3) {
+        this.answer3 = answer3;
+    }
+
+    public Set<User> getTaskSolvers() {
+        return taskSolvers;
+    }
+
+    public void setTaskSolvers(Set<User> taskSolvers) {
+        this.taskSolvers = taskSolvers;
+    }
+
+    public boolean findSolver(User user){
+        Set<User> ts = getTaskSolvers();
+        for (User tsUser : ts){
+            if (tsUser.getId().equals(user.getId()))
+                return true;
+        }
+        return false;
     }
 }

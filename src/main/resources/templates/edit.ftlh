@@ -25,7 +25,15 @@
         </div>
         <div class="form-group">
             <label for="inputAnswer" class="form-label">Answer</label>
-            <input type="text" class="form-control" id="inputAnswer" name="answer" placeholder="Answer" value="${message.answer!""}" />
+            <input type="text" class="form-control" id="inputAnswer" name="answer1" placeholder="First Answer" value="${message.answer1!""}" />
+        </div>
+        <div class="form-group">
+            <label for="inputAnswer" class="form-label">Answer</label>
+            <input type="text" class="form-control" id="inputAnswer" name="answer2" placeholder="Second Answer" value="${message.answer2!""}" />
+        </div>
+        <div class="form-group">
+            <label for="inputAnswer" class="form-label">Answer</label>
+            <input type="text" class="form-control" id="inputAnswer" name="answer3" placeholder="Third Answer" value="${message.answer3!""}" />
         </div>
         <div class="form-group">
             <div class="custom-file">

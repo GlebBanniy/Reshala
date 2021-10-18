@@ -50,7 +50,9 @@ public class UsersTaskController {
             @RequestParam String text,
             @RequestParam String category,
             @RequestParam String tag,
-            @RequestParam String answer,
+            @RequestParam String answer1,
+            @RequestParam String answer2,
+            @RequestParam String answer3,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         Message message = messageRepository.findById(id).get();
@@ -58,7 +60,9 @@ public class UsersTaskController {
         message.setText(text);
         message.setCategory(category);
         message.setTag(tag);
-        message.setAnswer(answer);
+        message.setAnswer1(answer1);
+        message.setAnswer2(answer2);
+        message.setAnswer3(answer3);
         if (file != null && !file.getOriginalFilename().isEmpty()){
             File uploadDir = new File(uploadpath);
             if (!uploadDir.exists()){
@@ -76,11 +80,13 @@ public class UsersTaskController {
     @GetMapping("/user/{userid}")
     public String showMyTasks(
             @PathVariable("userid") User user,
-            //@AuthenticationPrincipal User user,
             Model model){
         Iterable<Message> messages = messageRepository.findByAuthor(user);
         model.addAttribute("messages", messages);
         model.addAttribute("thisUser", user);
+        model.addAttribute("createdTasksCounter", messageRepository.findByAuthor(user).size());
+        model.addAttribute("solvedTasksCounter", user.getSolvedTasks().size());
+
         return "office";
     }
 
@@ -98,10 +104,12 @@ public class UsersTaskController {
             @RequestParam String text,
             @RequestParam String category,
             @RequestParam String tag,
-            @RequestParam String answer,
+            @RequestParam String answer1,
+            @RequestParam String answer2,
+            @RequestParam String answer3,
             @RequestParam("file") MultipartFile file,
             Model model) throws IOException {
-        Message message = new Message(name, text, category, tag, 0.0, user, answer);
+        Message message = new Message(name, text, category, tag, 0.0, user, answer1, answer2, answer3);
 
         if (file != null && !file.getOriginalFilename().isEmpty()){
             File uploadDir = new File(uploadpath);

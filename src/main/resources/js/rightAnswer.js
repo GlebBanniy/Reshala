@@ -1,0 +1,1 @@
+alert("Answer is right!");

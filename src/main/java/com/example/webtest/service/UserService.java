@@ -12,11 +12,15 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepo.findByUsername(username);
     }
+
+    /*public void addSolver(Message message, User user) {
+        user.getSolvedTasks().add(message);
+        userRepo.save(user);
+    }*/
 
 
 }
