@@ -1,2 +1,2 @@
 # Reshala
-The application is under development.
+Обновленная версия проекта в ветке "new".
